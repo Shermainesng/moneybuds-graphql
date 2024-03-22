@@ -34,11 +34,17 @@ export const typeDefs = `#graphql
     type Query {
       profile(id:ID!): Profile!
       profiles: [Profile!]
+      friends(id: ID!): [Profile]
       expense(id: ID!): Expense!
     }
     type Mutation {
+        addFriend(input: AddFriendInput): Profile
         addExpense(input: ExpenseInput!): Expense
         addExpenseMember(input: [ExpenseMemberInput]): [ExpenseMember] 
+    }
+    input AddFriendInput {
+        user_id: ID!
+        friend_id: ID!
     }
     input ExpenseInput {
         group_id: ID

@@ -6,15 +6,28 @@ export const expenseResolver = {
     expense: async (_, args) => {
       // console.log("reached expense", args.id);
       try {
-        const { data, error } = await supabase
+        const { data: expenseData, error: expenseError } = await supabase
           .from("expenses")
           .select("id, payer_id, amount, description")
           .eq("id", args.id)
           .single();
         // console.log("got expense", data);
-        handleSupabaseError(error);
+        handleSupabaseError(expenseError);
 
-        return data;
+        //fetch associated profile data for the payer_id
+        const payerProfile = await profileResolver.Query.profile(_, {
+          id: expenseData.payer_id,
+        });
+
+        console.log("profile Data", payerProfile);
+
+        const result = {
+          ...expenseData,
+          payer_id: payerProfile,
+        };
+        console.log(result);
+
+        return result;
       } catch (error) {
         throw new Error("Error fetching expense: " + error.message);
       }
