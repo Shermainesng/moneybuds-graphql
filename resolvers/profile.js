@@ -26,7 +26,7 @@ export const profileResolver = {
         // Fetch users from Supabase
         const { data, error } = await supabase
           .from("profiles")
-          .select("id, username");
+          .select("id, username, phone_number");
 
         handleSupabaseError(error);
         return data;
@@ -70,15 +70,23 @@ export const profileResolver = {
         const { data: insertedRows, error } = await supabase
           .from("friends")
           .insert([
-            { userId: args.input.user_id, friendId: args.input.friend_id },
-            { userId: args.input.friend_id, friendId: args.input.user_id },
-          ]);
+            {
+              user_id: args.input.user_id,
+              friend_id: args.input.friend_id,
+              status: args.input.status,
+            },
+            {
+              user_id: args.input.friend_id,
+              friend_id: args.input.user_id,
+              status: args.input.status,
+            },
+          ])
+          .select();
 
-        handleSupabaseError(expenseError);
-
-        return insertedRows;
+        handleSupabaseError(error);
+        return !!insertedRows;
       } catch (err) {
-        console.error("Error adding friends:", error.message);
+        console.error("Error adding friends:", err.message);
       }
     },
   },
