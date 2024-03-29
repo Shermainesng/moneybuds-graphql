@@ -1,4 +1,4 @@
-import { supabase } from "../supabase.js";
+import { supabase } from "../../supabase.js";
 import { handleSupabaseError } from "./shared.js";
 
 export const profileResolver = {

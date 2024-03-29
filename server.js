@@ -5,8 +5,8 @@ import { createSchema } from "graphql-yoga";
 import { typeDefs } from "./schema.js";
 //import resolvers
 import { mergeResolvers } from "@graphql-tools/merge";
-import { profileResolver } from "./resolvers/profile.js";
-import { expenseResolver } from "./resolvers/Expense.js";
+import { profileResolver } from "./src/resolvers/profile.js";
+import { expenseResolver } from "./src/resolvers/Expense.js";
 
 // const supabase = createClient(
 //   "https://jecatujziyybwubikulz.supabase.co",
