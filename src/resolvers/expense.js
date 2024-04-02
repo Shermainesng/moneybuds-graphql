@@ -68,31 +68,45 @@ export const expenseResolver = {
     //     throw new Error("Error fetching expense: " + error.message);
     //   }
     // },
-    expenseMembersByUserId: async (_, args) => {
-      // console.log("reached expense members", args.id);
+    // expenseMembersByUserId: async (_, args) => {
+    //   // console.log("reached expense members", args.id);
+    //   try {
+    //     const { data: expenseRows, error: expenseError } = await supabase
+    //       .from("expense_members")
+    //       .select("expense_id")
+    //       .eq("member_id", args.id);
+
+    //     const expenseIDs = expenseRows.map((row) => row.expense_id.toString());
+    //     console.log("got expense", expenseIDs);
+    //     handleSupabaseError(expenseError);
+    //     return expenseIDs;
+    //   } catch (error) {
+    //     throw new Error("Error fetching expense: " + error.message);
+    //   }
+    // },
+    //take an array of expenseIds and return expense members for all - filter out member.id=mine
+    expenseMembersByExpenseIds: async (_, args) => {
+      let expenseIDs;
+      //given user ID, get array of expense IDs that user is part of
       try {
         const { data: expenseRows, error: expenseError } = await supabase
           .from("expense_members")
           .select("expense_id")
-          .eq("member_id", args.id);
+          .eq("member_id", args.user_id);
 
-        const expenseIDs = expenseRows.map((row) => row.expense_id.toString());
+        expenseIDs = expenseRows.map((row) => row.expense_id.toString());
         console.log("got expense", expenseIDs);
         handleSupabaseError(expenseError);
-        return expenseIDs;
       } catch (error) {
-        throw new Error("Error fetching expense: " + error.message);
+        throw new Error("Error fetching expense IDs: " + error.message);
       }
-    },
-    //take an array of expenseIds and return expense members for all - filter out member.id=mine
-    expenseMembersByExpenseIds: async (_, args) => {
-      console.log("reached expense members by expense ID", args.expense_ids);
+
       try {
         const { data: expenseMembersData, error: expenseError } = await supabase
           .from("expense_members")
           .select("id, member_id, expense_id, isOwed, owes")
           // .eq("expense_id", args.expense_ids);
-          .in("expense_id", args.expense_ids);
+          .in("expense_id", expenseIDs);
 
         console.log("got expense", expenseMembersData);
         handleSupabaseError(expenseError);
@@ -129,6 +143,11 @@ export const expenseResolver = {
         throw new Error("Error fetching expense: " + error.message);
       }
     },
+    //
+    // expenseMembersByExpenseIds: async (_, args) => {
+    //get array of expense IDs where user is a part of
+
+    // }
     // expenseMembersByExpenseId: async (_, args) => {
     //   console.log("reached expense members by expense ID", args.id);
     //   try {

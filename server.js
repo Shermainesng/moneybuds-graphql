@@ -6,7 +6,7 @@ import { typeDefs } from "./schema.js";
 //import resolvers
 import { mergeResolvers } from "@graphql-tools/merge";
 import { profileResolver } from "./src/resolvers/profile.js";
-import { expenseResolver } from "./src/resolvers/Expense.js";
+import { expenseResolver } from "./src/resolvers/expense.js";
 
 // const supabase = createClient(
 //   "https://jecatujziyybwubikulz.supabase.co",

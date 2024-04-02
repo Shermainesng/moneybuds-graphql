@@ -37,9 +37,10 @@ export const typeDefs = `#graphql
       friends(id: ID!): [Profile]
       expense(id: ID!): Expense!
     #   expenseMembersByUserId(id:ID!): [ExpenseMember]
-      expenseMembersByUserId(id: ID!): [String!]!
+    #   expenseMembersByUserId(id: ID!): [String!]!
     #   expenseMembersByExpenseId(expense_id:ID!): [ExpenseMember]
-        expenseMembersByExpenseIds(expense_ids:[ID], user_id: ID): [ExpenseMember]
+        # expenseMembersByExpenseIds(expense_ids:[ID], user_id: ID): [ExpenseMember]
+        expenseMembersByExpenseIds(user_id: ID): [ExpenseMember]
     }
     type Mutation {
         addFriend(input: AddFriendInput): Boolean!

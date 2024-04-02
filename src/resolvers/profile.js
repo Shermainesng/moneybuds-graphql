@@ -5,7 +5,7 @@ export const profileResolver = {
   //resolvers for entrypoint into the graph
   Query: {
     profile: async (_, args) => {
-      // console.log("in profile", args.id);
+      console.log("in profile", args.id);
       try {
         const { data, error } = await supabase
           .from("profiles")
