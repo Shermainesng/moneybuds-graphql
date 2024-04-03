@@ -7,6 +7,7 @@ import { typeDefs } from "./schema.js";
 import { mergeResolvers } from "@graphql-tools/merge";
 import { profileResolver } from "./src/resolvers/profile.js";
 import { expenseResolver } from "./src/resolvers/expense.js";
+import { groupResolver } from "./src/resolvers/group.js";
 
 // const supabase = createClient(
 //   "https://jecatujziyybwubikulz.supabase.co",
@@ -21,7 +22,7 @@ export const schema = createSchema({
   //   ...profileResolver,
   //   ...expenseResolver,
   // },
-  resolvers: mergeResolvers([profileResolver, expenseResolver]),
+  resolvers: mergeResolvers([profileResolver, expenseResolver, groupResolver]),
 });
 
 // Create a Yoga instance with a GraphQL schema.
