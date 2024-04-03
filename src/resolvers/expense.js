@@ -189,8 +189,6 @@ export const expenseResolver = {
           .from("expenses")
           .insert(args.input)
           .select();
-
-        console.log(data[0]);
         const expense = data[0];
         //get the profile object
         const payerProfile = await profileResolver.Query.profile(_, {

@@ -14,7 +14,12 @@ export const typeDefs = `#graphql
     type Group {
         id: ID!
         name: String!
-        isGroup: Boolean!
+        created_by:Profile! 
+    }
+    type GroupMember {
+        id: ID!
+        group_id: Group!
+        user_id: Profile!
     }
     type Expense {
         id: ID
@@ -36,6 +41,7 @@ export const typeDefs = `#graphql
       profiles: [Profile!]
       friends(id: ID!): [Profile]
       expense(id: ID!): Expense!
+      group(id: ID!): Group!
     #   expenseMembersByUserId(id:ID!): [ExpenseMember]
     #   expenseMembersByUserId(id: ID!): [String!]!
     #   expenseMembersByExpenseId(expense_id:ID!): [ExpenseMember]
@@ -46,6 +52,7 @@ export const typeDefs = `#graphql
         addFriend(input: AddFriendInput): Boolean!
         addExpense(input: ExpenseInput!): Expense
         addExpenseMember(input: [ExpenseMemberInput]): [ExpenseMember] 
+        addGroup(input: AddGroupInput): Group
     }
     input AddFriendInput {
         user_id: ID!
@@ -58,6 +65,10 @@ export const typeDefs = `#graphql
         amount: Int!
         description: String
         date: String
+    }
+    input AddGroupInput {
+        name: String
+        created_by: ID
     }
     input ExpenseMemberInput {
         # when defining input types, we specify scalar types like ID, string, Int instead of complex object types
