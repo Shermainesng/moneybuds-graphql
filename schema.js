@@ -42,17 +42,15 @@ export const typeDefs = `#graphql
       friends(id: ID!): [Profile]
       expense(id: ID!): Expense!
       group(id: ID!): Group!
-    #   expenseMembersByUserId(id:ID!): [ExpenseMember]
-    #   expenseMembersByUserId(id: ID!): [String!]!
-    #   expenseMembersByExpenseId(expense_id:ID!): [ExpenseMember]
-        # expenseMembersByExpenseIds(expense_ids:[ID], user_id: ID): [ExpenseMember]
-        expenseMembersByExpenseIds(user_id: ID): [ExpenseMember]
+      groups(userId:ID!): [Group]
+      expenseMembersByExpenseIds(userId: ID): [ExpenseMember]
     }
     type Mutation {
         addFriend(input: AddFriendInput): Boolean!
         addExpense(input: ExpenseInput!): Expense
         addExpenseMember(input: [ExpenseMemberInput]): [ExpenseMember] 
         addGroup(input: AddGroupInput): Group
+        addGroupMember(input: AddGroupMembersInput) :[GroupMember]
     }
     input AddFriendInput {
         user_id: ID!
@@ -69,6 +67,10 @@ export const typeDefs = `#graphql
     input AddGroupInput {
         name: String
         created_by: ID
+    }
+    input AddGroupMembersInput {
+        userIds: [ID]
+        group_id: ID!
     }
     input ExpenseMemberInput {
         # when defining input types, we specify scalar types like ID, string, Int instead of complex object types
