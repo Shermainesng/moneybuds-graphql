@@ -43,6 +43,7 @@ export const typeDefs = `#graphql
       expense(id: ID!): Expense!
       group(id: ID!): Group!
       groups(userId:ID!): [Group]
+      groupMembers(groupId: ID!): [Profile]
       expenseMembersByExpenseIds(userId: ID): [ExpenseMember]
     }
     type Mutation {

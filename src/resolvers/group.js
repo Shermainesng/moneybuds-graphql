@@ -70,6 +70,31 @@ export const groupResolver = {
         throw new Error("Error fetching groups: " + error.message);
       }
     },
+    groupMembers: async (_, args) => {
+      console.log("reached groupMembers", args.groupId);
+      try {
+        const { data: groupMembers, error: groupMembersError } = await supabase
+          .from("group_members")
+          .select("user_id")
+          .eq("group_id", args.groupId);
+
+        handleSupabaseError(groupMembersError);
+        console.log(groupMembers);
+
+        const promises = groupMembers.map(async (member) => {
+          const profileData = await profileResolver.Query.profile(_, {
+            id: member.user_id,
+          });
+          return profileData;
+        });
+
+        const groupMembersProfiles = await Promise.all(promises);
+        console.log(groupMembersProfiles);
+        return groupMembersProfiles;
+      } catch (error) {
+        throw new Error("Error fetching group members: " + error.message);
+      }
+    },
   },
   Mutation: {
     async addGroup(_, args) {
@@ -101,7 +126,6 @@ export const groupResolver = {
           groupMembers.push(groupMember);
         }
         console.log("group members for insert", groupMembers);
-        //TODO: check if user alr exist in that group - cannot add for that user
 
         const { data, error } = await supabase
           .from("group_members")
