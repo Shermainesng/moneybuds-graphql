@@ -33,57 +33,7 @@ export const expenseResolver = {
         throw new Error("Error fetching expense: " + error.message);
       }
     },
-    // expenseMembersByUserId: async (_, args) => {
-    //   // console.log("reached expense members", args.id);
-    //   try {
-    //     const { data: expenseMembersData, error: expenseError } = await supabase
-    //       .from("expense_members")
-    //       .select("id, expense_id, member_id, isOwed, owes")
-    //       .eq("member_id", args.id);
 
-    //     // console.log("got expense", expenseMembersData);
-    //     handleSupabaseError(expenseError);
-
-    //     const payerProfile = await profileResolver.Query.profile(_, {
-    //       id: args.id,
-    //     });
-
-    //     const promises = expenseMembersData.map(async (expenseMemberRow) => {
-    //       // Assuming payerProfile and expenseResolver are defined elsewhere
-    //       expenseMemberRow.member_id = payerProfile;
-    //       const expense = await expenseResolver.Query.expense(_, {
-    //         id: expenseMemberRow.expense_id,
-    //       });
-    //       expenseMemberRow.expense_id = expense;
-    //       return expenseMemberRow; // Return the updated object
-    //     });
-
-    //     // Wait for all Promises to resolve
-    //     const updatedExpenseMembersData = await Promise.all(promises);
-
-    //     console.log("results:", updatedExpenseMembersData);
-
-    //     return updatedExpenseMembersData;
-    //   } catch (error) {
-    //     throw new Error("Error fetching expense: " + error.message);
-    //   }
-    // },
-    // expenseMembersByUserId: async (_, args) => {
-    //   // console.log("reached expense members", args.id);
-    //   try {
-    //     const { data: expenseRows, error: expenseError } = await supabase
-    //       .from("expense_members")
-    //       .select("expense_id")
-    //       .eq("member_id", args.id);
-
-    //     const expenseIDs = expenseRows.map((row) => row.expense_id.toString());
-    //     console.log("got expense", expenseIDs);
-    //     handleSupabaseError(expenseError);
-    //     return expenseIDs;
-    //   } catch (error) {
-    //     throw new Error("Error fetching expense: " + error.message);
-    //   }
-    // },
     //take an array of expenseIds and return expense members for all - filter out member.id=mine
     expenseMembersByExpenseIds: async (_, args) => {
       let expenseIDs;
@@ -92,7 +42,7 @@ export const expenseResolver = {
         const { data: expenseRows, error: expenseError } = await supabase
           .from("expense_members")
           .select("expense_id")
-          .eq("member_id", args.user_id);
+          .eq("member_id", args.userId);
 
         expenseIDs = expenseRows.map((row) => row.expense_id.toString());
         console.log("got expense", expenseIDs);
@@ -114,7 +64,7 @@ export const expenseResolver = {
         //filter out myself
         const filteredExpenseMembers = expenseMembersData.filter(
           (expenseMember) => {
-            return expenseMember.member_id !== args.user_id;
+            return expenseMember.member_id !== args.userId;
           }
         );
 
@@ -143,43 +93,6 @@ export const expenseResolver = {
         throw new Error("Error fetching expense: " + error.message);
       }
     },
-    //
-    // expenseMembersByExpenseIds: async (_, args) => {
-    //get array of expense IDs where user is a part of
-
-    // }
-    // expenseMembersByExpenseId: async (_, args) => {
-    //   console.log("reached expense members by expense ID", args.id);
-    //   try {
-    //     const { data: expenseMembersData, error: expenseError } = await supabase
-    //       .from("expense_members")
-    //       .select("id, member_id, expense_id, isOwed, owes")
-    //       .eq("expense_id", args.expense_id);
-
-    //     // console.log("got expense", expenseMembersData);
-    //     handleSupabaseError(expenseError);
-
-    //     const promises = expenseMembersData.map(async (expenseMemberRow) => {
-    //       const payerProfile = await profileResolver.Query.profile(_, {
-    //         id: expenseMemberRow.member_id,
-    //       });
-    //       expenseMemberRow.member_id = payerProfile;
-    //       const expense = await expenseResolver.Query.expense(_, {
-    //         id: expenseMemberRow.expense_id,
-    //       });
-    //       expenseMemberRow.expense_id = expense;
-    //       return expenseMemberRow; // Return the updated object
-    //     });
-
-    //     // Wait for all Promises to resolve
-    //     const updatedExpenseMembersData = await Promise.all(promises);
-
-    //     console.log("results:", updatedExpenseMembersData);
-    //     return updatedExpenseMembersData;
-    //   } catch (error) {
-    //     throw new Error("Error fetching expense: " + error.message);
-    //   }
-    // },
   },
   Mutation: {
     async addExpense(_, args) {
