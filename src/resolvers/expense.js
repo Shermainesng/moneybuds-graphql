@@ -1,6 +1,7 @@
 import { supabase } from "../../supabase.js";
 import { handleSupabaseError } from "./shared.js";
 import { profileResolver } from "./profile.js";
+import { groupResolver } from "./group.js";
 
 export const expenseResolver = {
   Query: {
@@ -9,7 +10,7 @@ export const expenseResolver = {
       try {
         const { data: expenseData, error: expenseError } = await supabase
           .from("expenses")
-          .select("id, payer_id, amount, description")
+          .select("id, payer_id,group_id, amount, description")
           .eq("id", args.id)
           .single();
         // console.log("got expense", data);
@@ -20,11 +21,19 @@ export const expenseResolver = {
           id: expenseData.payer_id,
         });
 
+        //fetch associated group data (if not null) for the expense
+        let groupObject = null;
+        if (expenseData.group_id !== null) {
+          groupObject = await groupResolver.Query.group(_, {
+            id: expenseData.group_id,
+          });
+        }
         // console.log("profile Data", payerProfile);
 
         const result = {
           ...expenseData,
           payer_id: payerProfile,
+          group_id: groupObject,
         };
         // console.log(result);
 
@@ -34,6 +43,8 @@ export const expenseResolver = {
       }
     },
     expenseMembersByGroupIds: async (_, args) => {
+      console.log("in group", args.groupId);
+      console.log("in group", args.userId);
       let expenseIDs;
       try {
         const { data: expenseRows, error: expenseError } = await supabase
@@ -89,6 +100,7 @@ export const expenseResolver = {
         throw new Error("Error fetching expense: " + error.message);
       }
     },
+    //get expenses where user is a part of, then return all the recorded expense members
     expenseMembersByExpenseIds: async (_, args) => {
       let expenseIDs;
       console.log("in method userID", args.userId);
