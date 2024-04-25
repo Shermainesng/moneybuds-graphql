@@ -24,6 +24,7 @@ const getProfile = async (_, group) => {
 export const groupResolver = {
   Query: {
     group: async (_, args) => {
+      console.log("in get group", args.id);
       try {
         const { data: group, error: groupError } = await supabase
           .from("groups")
@@ -32,7 +33,7 @@ export const groupResolver = {
           .single();
 
         const groupWithProfile = await getProfile(_, group);
-        console.log(groupWithProfile);
+        // console.log(groupWithProfile);
         handleSupabaseError(groupError);
         return groupWithProfile;
       } catch (err) {

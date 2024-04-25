@@ -25,16 +25,17 @@ export const typeDefs = `#graphql
         id: ID
         group_id: Group
         payer_id: Profile!
-        amount: Int!
+        amount: Float!
         description: String
         date: String
+        created_at: String
     }
     type ExpenseMember {
         id: ID!
         expense_id: Expense!
         member_id: Profile!
-        isOwed: Int!
-        owes: Int!
+        isOwed: Float!
+        owes: Float!
     }
     type Query {
       profile(id:ID!): Profile!
@@ -44,7 +45,9 @@ export const typeDefs = `#graphql
       group(id: ID!): Group!
       groups(userId:ID!): [Group]
       groupMembers(groupId: ID!): [Profile]
-      expenseMembersByExpenseIds(userId: ID): [ExpenseMember]
+      expenseMembersByExpenseIds(userId: ID, expenseId: ID): [ExpenseMember]
+      expenseMembersByGroupIds(groupId: ID, userId: ID): [ExpenseMember]
+      expenseDetailsByExpenseMemberId(expenseMemberId: ID): Expense
     }
     type Mutation {
         addFriend(input: AddFriendInput): Boolean!
@@ -61,7 +64,7 @@ export const typeDefs = `#graphql
     input ExpenseInput {
         group_id: ID
         payer_id: ID!
-        amount: Int!
+        amount: Float!
         description: String
         date: String
     }
@@ -77,7 +80,7 @@ export const typeDefs = `#graphql
         # when defining input types, we specify scalar types like ID, string, Int instead of complex object types
         expense_id: ID! 
         member_id: ID! 
-        isOwed: Int!
-        owes: Int!
+        isOwed: Float!
+        owes: Float!
     }
 `;
