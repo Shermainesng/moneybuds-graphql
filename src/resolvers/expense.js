@@ -69,13 +69,6 @@ export const expenseResolver = {
         // console.log("got expense", expenseMembersData);
         handleSupabaseError(expenseError);
 
-        //filter out myself
-        // const filteredExpenseMembers = expenseMembersData.filter(
-        //   (expenseMember) => {
-        //     return expenseMember.member_id !== args.userId;
-        //   }
-        // );
-
         const promises = expenseMembersData.map(async (expenseMemberRow) => {
           const payerProfile = await profileResolver.Query.profile(_, {
             id: expenseMemberRow.member_id,

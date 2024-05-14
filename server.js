@@ -8,13 +8,19 @@ import { mergeResolvers } from "@graphql-tools/merge";
 import { profileResolver } from "./src/resolvers/profile.js";
 import { expenseResolver } from "./src/resolvers/expense.js";
 import { groupResolver } from "./src/resolvers/group.js";
+import { settlementResolver } from "./src/resolvers/settlement.js";
 
 // const supabase = createClient(
 //   "https://jecatujziyybwubikulz.supabase.co",
 //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImplY2F0dWp6aXl5Ynd1YmlrdWx6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDgwNDY4MjksImV4cCI6MjAyMzYyMjgyOX0._Hz16c-LDmguqHINmks8paG7RvPBlXUs_VFOG6h-wCg"
 // );
 
-const resolvers = mergeResolvers([profileResolver, expenseResolver]);
+const resolvers = mergeResolvers([
+  profileResolver,
+  expenseResolver,
+  groupResolver,
+  settlementResolver,
+]);
 
 export const schema = createSchema({
   typeDefs,
@@ -22,7 +28,8 @@ export const schema = createSchema({
   //   ...profileResolver,
   //   ...expenseResolver,
   // },
-  resolvers: mergeResolvers([profileResolver, expenseResolver, groupResolver]),
+  resolvers: resolvers,
+  // mergeResolvers([profileResolver, expenseResolver, groupResolver, settlementResolver]),
 });
 
 // Create a Yoga instance with a GraphQL schema.
