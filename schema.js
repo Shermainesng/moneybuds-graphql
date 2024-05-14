@@ -37,6 +37,12 @@ export const typeDefs = `#graphql
         isOwed: Float!
         owes: Float!
     }
+    type Settlement {
+        id: ID!
+        payer_id: Profile
+        recipient_id: Profile
+        amount: Float
+    }
     type Query {
       profile(id:ID!): Profile!
       profiles: [Profile!]
@@ -48,6 +54,9 @@ export const typeDefs = `#graphql
       expenseMembersByExpenseIds(userId: ID, expenseId: ID): [ExpenseMember]
       expenseMembersByGroupIds(groupId: ID, userId: ID): [ExpenseMember]
       expenseDetailsByExpenseMemberId(expenseMemberId: ID): Expense
+      settlement(id:ID!): Settlement
+    #   settlements: [Settlement]
+      settlements(userId: ID!): [Settlement]
     }
     type Mutation {
         addFriend(input: AddFriendInput): Boolean!
